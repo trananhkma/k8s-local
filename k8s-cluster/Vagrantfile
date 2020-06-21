@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Every Vagrant development environment requires a box. You can search for
+# boxes at https://vagrantcloud.com/search.
+BOX_IMAGE = "generic/ubuntu2004"
+NODES = 2
+
+# Naming
+MASTER_NAME = "k8s-master"
+NODE_PREFIX = "k8s-node"
+
+# Networking
+HOST_ONLY_NETWORK_NAME = "vboxnet0"
+HOST_ONLY_NETWORK = "192.168.68"
+IP_START_AT = 10
+NETMARK = "24"
+
+# Spec
+MASTER_CPU = 1
+MASTER_RAM = 2048
+NODE_CPU = 1
+NODE_RAM = 2048
+
+
+Vagrant.configure("2") do |config|
+  # Master node
+  config.vm.define MASTER_NAME do |m|
+    m.vm.box = BOX_IMAGE
+    m.vm.hostname = MASTER_NAME
+    m.vm.network "private_network",
+      name: HOST_ONLY_NETWORK_NAME,
+      ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT}",
+      netmask: NETMARK
+    m.vm.provider "virtualbox" do |v|
+      v.cpus = MASTER_CPU
+      v.memory = MASTER_RAM
+    end
+  end
+  
+  # Minion nodes
+  (1..NODES).each do |i|
+    config.vm.define "#{NODE_PREFIX}#{i}" do |n|
+      n.vm.box = BOX_IMAGE
+      n.vm.hostname = "#{NODE_PREFIX}#{i}"
+      n.vm.network "private_network",
+        name: HOST_ONLY_NETWORK_NAME,
+        ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT + i}",
+        netmask: NETMARK
+      n.vm.provider "virtualbox" do |v|
+        v.cpus = NODE_CPU
+        v.memory = NODE_RAM
+      end
+    end
+  end
+end
