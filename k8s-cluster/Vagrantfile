@@ -33,6 +33,7 @@ Vagrant.configure("2") do |config|
       ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT}",
       netmask: NETMARK
     m.vm.provider "virtualbox" do |v|
+      v.name = MASTER_NAME
       v.cpus = MASTER_CPU
       v.memory = MASTER_RAM
     end
@@ -48,6 +49,7 @@ Vagrant.configure("2") do |config|
         ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT + i}",
         netmask: NETMARK
       n.vm.provider "virtualbox" do |v|
+        v.name = "#{NODE_PREFIX}#{i}"
         v.cpus = NODE_CPU
         v.memory = NODE_RAM
       end
