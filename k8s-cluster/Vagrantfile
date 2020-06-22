@@ -4,54 +4,82 @@
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://vagrantcloud.com/search.
 BOX_IMAGE = "generic/ubuntu2004"
-NODES = 2
 
 # Naming
-MASTER_NAME = "k8s-master"
-NODE_PREFIX = "k8s-node"
+MASTER_PREFIX = "k8s-master"
+WORKER_PREFIX = "k8s-worker"
+LB_NAME = "lb01"
 
 # Networking
 HOST_ONLY_NETWORK_NAME = "vboxnet0"
 HOST_ONLY_NETWORK = "192.168.68"
-IP_START_AT = 10
+LB_IP = 5
+MASTER_IP_START_AT = 10
+WORKER_IP_START_AT = 20
 NETMARK = "24"
 
 # Spec
+MASTER_NODES = 3
 MASTER_CPU = 1
 MASTER_RAM = 2048
-NODE_CPU = 1
-NODE_RAM = 2048
+
+WORKER_NODES = 3
+WORKER_CPU = 1
+WORKER_RAM = 2048
+
+LB_CPU = 1
+LB_RAM = 2048
 
 
 Vagrant.configure("2") do |config|
-  # Master node
-  config.vm.define MASTER_NAME do |m|
-    m.vm.box = BOX_IMAGE
-    m.vm.hostname = MASTER_NAME
-    m.vm.network "private_network",
+  # LB node
+  config.vm.define LB_NAME do |l|
+    l.vm.box = BOX_IMAGE
+    l.vm.hostname = LB_NAME
+    l.vm.network "private_network",
       name: HOST_ONLY_NETWORK_NAME,
-      ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT}",
+      ip: "#{HOST_ONLY_NETWORK}.#{LB_IP}",
       netmask: NETMARK
-    m.vm.provider "virtualbox" do |v|
-      v.name = MASTER_NAME
-      v.cpus = MASTER_CPU
-      v.memory = MASTER_RAM
+
+    l.vm.provider "virtualbox" do |v|
+      v.name = LB_NAME
+      v.cpus = LB_CPU
+      v.memory = LB_RAM
+    end
+  end
+
+  # Master nodes
+  (1..MASTER_NODES).each do |i|
+    config.vm.define "#{MASTER_PREFIX}#{i}" do |m|
+      m.vm.box = BOX_IMAGE
+      m.vm.hostname = "#{MASTER_PREFIX}#{i}"
+      m.vm.network "private_network",
+        name: HOST_ONLY_NETWORK_NAME,
+        ip: "#{HOST_ONLY_NETWORK}.#{MASTER_IP_START_AT + i}",
+        netmask: NETMARK
+
+      m.vm.provider "virtualbox" do |v|
+        v.name = "#{MASTER_PREFIX}#{i}"
+        v.cpus = MASTER_CPU
+        v.memory = MASTER_RAM
+      end
     end
   end
   
-  # Minion nodes
-  (1..NODES).each do |i|
-    config.vm.define "#{NODE_PREFIX}#{i}" do |n|
-      n.vm.box = BOX_IMAGE
-      n.vm.hostname = "#{NODE_PREFIX}#{i}"
-      n.vm.network "private_network",
+  # Worker nodes
+  (1..WORKER_NODES).each do |i|
+    config.vm.define "#{WORKER_PREFIX}#{i}" do |w|
+      w.vm.box = BOX_IMAGE
+      w.vm.hostname = "#{WORKER_PREFIX}#{i}"
+      w.vm.network "private_network",
         name: HOST_ONLY_NETWORK_NAME,
-        ip: "#{HOST_ONLY_NETWORK}.#{IP_START_AT + i}",
+        ip: "#{HOST_ONLY_NETWORK}.#{WORKER_IP_START_AT + i}",
         netmask: NETMARK
-      n.vm.provider "virtualbox" do |v|
-        v.name = "#{NODE_PREFIX}#{i}"
-        v.cpus = NODE_CPU
-        v.memory = NODE_RAM
+
+      w.vm.provider "virtualbox" do |v|
+        v.name = "#{WORKER_PREFIX}#{i}"
+        v.cpus = WORKER_CPU
+        v.memory = WORKER_RAM
       end
     end
   end
