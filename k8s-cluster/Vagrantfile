@@ -60,6 +60,7 @@ Vagrant.configure("2") do |config|
       m.vm.box = BOX_IMAGE
       m.vm.hostname = "master#{i}"
       m.vm.network "private_network", ip: "#{HOST_ONLY_NETWORK}.#{MASTER_IP_START_AT + i}"
+      m.vm.provision "shell", inline: "swapoff -a"
 
       m.vm.provision :salt do |s|
         s.minion_config = "saltstack/etc/master#{i}"
@@ -85,6 +86,7 @@ Vagrant.configure("2") do |config|
       w.vm.box = BOX_IMAGE
       w.vm.hostname = "worker#{i}"
       w.vm.network "private_network", ip: "#{HOST_ONLY_NETWORK}.#{WORKER_IP_START_AT + i}"
+      w.vm.provision "shell", inline: "swapoff -a"
 
       w.vm.provision :salt do |s|
         s.minion_config = "saltstack/etc/worker#{i}"
