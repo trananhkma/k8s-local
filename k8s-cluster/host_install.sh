@@ -19,6 +19,10 @@ sudo mkdir -p /etc/salt/pki/master/minions
 cd keys
 sudo bash -c 'find -type f -name "*.pub" | while read f; do cp "$f" "/etc/salt/pki/master/minions/${f%.pub}"; done'
 
+# copy salt root
+sudo cp -r ../salt /srv/
+sudo cp -r ../pillar /srv/
+
 # Install virtualbox
 sudo apt-get install virtualbox
 
