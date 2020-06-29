@@ -16,10 +16,22 @@ docker-ce:
   require:
     - pkgrepo: docker_prerequisites
     - pkg: docker_prerequisites
+  file.managed:
+    - name: /etc/docker/daemon.json
+    - source: salt://docker/daemon.json
   service.running:
     - name: docker
     - enable: True
     - restart: True
+
+/etc/systemd/system/docker.service.d/:
+  file.directory:
+    - makedirs: True
+  cmd.run:
+    - name: |
+        systemctl daemon-reload
+        systemctl restart docker
+        sudo systemctl enable docker
 
 k8s_prerequisites:
   pkgrepo.managed:
