@@ -3,7 +3,7 @@
 
 # Every Vagrant development environment requires a box. You can search for
 # boxes at https://vagrantcloud.com/search.
-BOX_IMAGE = "generic/ubuntu2004"
+BOX_IMAGE = "ubuntu/bionic64"
 
 # Networking
 HOST_ONLY_NETWORK = "192.168.68"
