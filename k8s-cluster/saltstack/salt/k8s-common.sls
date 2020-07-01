@@ -49,3 +49,7 @@ k8s:
       - kubectl
   require:
     - pkgrepo: k8s_prerequisites
+
+/home/vagrant/kube-flannel.yml:
+  file.managed:
+    - source: salt://k8s/kube-flannel.yml
