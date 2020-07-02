@@ -85,5 +85,8 @@ $ sudo kubeadm join 192.168.68.5:6443 --token s8xy3j.rubokkgevog3k10g \
 $ kubectl get nodes
 ```
 
-
-
+### Add node-ip for each k8s node
+Run following command on host:
+```
+salt -C 'master* or worker*' cmd.script salt://k8s/add_node_ip.sh
+```
