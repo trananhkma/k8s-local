@@ -23,6 +23,7 @@ sudo bash -c 'find -type f -name "*.pub" | while read f; do cp "$f" "/etc/salt/p
 sudo cp -r ../salt /srv/
 sudo cp -r ../pillar /srv/
 
+cd ../../
 # Install virtualbox
 sudo apt-get install virtualbox
 

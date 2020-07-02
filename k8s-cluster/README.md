@@ -1,4 +1,5 @@
-# Setting up
+# Deploy Highly Available clusters with kubeadm
+![alt text](github.com/trananhkma/vagrant-playground/tree/master/k8s-cluster/kubeadm-ha.png)
 ### Install dependency packages on host machine
 ``` 
 $ sudo chmod +x host_install.sh
@@ -24,7 +25,7 @@ $ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 $ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 ```
-$ kubectl apply -f kube-flannel.yml
+$ kubectl apply -f saltstack/salt/k8s/kube-flannel.yml
 ```
 ### Check service status and wait for all change to `running`
 ```
