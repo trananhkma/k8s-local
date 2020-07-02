@@ -1,4 +1,5 @@
-# Setting up
+# Deploy Highly Available clusters with kubeadm
+![alt text](kubeadm-ha.png)
 ### Install dependency packages on host machine
 ``` 
 $ sudo chmod +x host_install.sh
