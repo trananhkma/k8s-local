@@ -1,5 +1,5 @@
 # Deploy Highly Available clusters with kubeadm
-![alt text](github.com/trananhkma/vagrant-playground/tree/master/k8s-cluster/kubeadm-ha.png)
+![alt text](kubeadm-ha.png)
 ### Install dependency packages on host machine
 ``` 
 $ sudo chmod +x host_install.sh
