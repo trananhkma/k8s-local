@@ -8,6 +8,8 @@ EOF
 sudo apt-get update
 sudo apt-get install salt-master
 sudo chown -R $(id -un):$(id -gn) /etc/salt /var/cache/salt /var/log/salt /var/run/salt
+sudo echo "user: $(id -gn)" >> /etc/salt/master
+sudo echo "interface: 192.168.68.1" >> /etc/salt/master
 
 cd saltstack
 sudo cp etc/master /etc/salt/master
