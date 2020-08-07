@@ -7,7 +7,7 @@ deb http://repo.saltstack.com/py3/ubuntu/$(lsb_release -rs)/amd64/latest $(lsb_r
 EOF
 sudo apt-get update
 sudo apt-get install salt-master
-sudo chown -R $(whoami) /etc/salt /var/cache/salt /var/log/salt /var/run/salt
+sudo chown -R $(id -un):$(id -gn) /etc/salt /var/cache/salt /var/log/salt /var/run/salt
 
 cd saltstack
 sudo cp etc/master /etc/salt/master
